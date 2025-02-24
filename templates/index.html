@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL短縮アプリ</title>
+    <script>
+        async function shortenURL() {
+            const urlInput = document.getElementById('url').value;
+            const response = await fetch('/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urlInput })
+            });
+            
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('shortened-url').innerHTML = `短縮URL: <a href="${result.short_url}" target="_blank">${result.short_url}</a>`;
+            } else {
+                document.getElementById('shortened-url').innerText = `エラー: ${result.error}`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>URL短縮アプリ</h2>
+    <input type="text" id="url" placeholder="短縮したいURLを入力">
+    <button onclick="shortenURL()">短縮</button>
+    <p id="shortened-url"></p>
+</body>
+</html>
